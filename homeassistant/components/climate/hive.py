@@ -5,7 +5,7 @@ For more details about this platform, please refer to the documentation at
 https://home-assistant.io/components/climate.hive/
 """
 from homeassistant.components.climate import (
-    ClimateDevice, STATE_AUTO, STATE_HEAT, STATE_OFF, STATE_ON,
+    ClimateDevice, ATTR_OPERATION_MODE, STATE_AUTO, STATE_HEAT, STATE_OFF, STATE_ON,
     SUPPORT_AUX_HEAT, SUPPORT_TARGET_TEMPERATURE, SUPPORT_OPERATION_MODE)
 from homeassistant.const import ATTR_TEMPERATURE, TEMP_CELSIUS
 from homeassistant.components.hive import DATA_HIVE
@@ -134,6 +134,10 @@ class HiveClimateEntity(ClimateDevice):
             entity.handle_update(self.data_updatesource)
 
     def set_temperature(self, **kwargs):
+        """Set new Heating mode."""
+        if ATTR_OPERATION_MODE in kwargs:
+            self.set_operation_mode(kwargs.get(ATTR_OPERATION_MODE))
+
         """Set new target temperature."""
         new_temperature = kwargs.get(ATTR_TEMPERATURE)
         if new_temperature is not None:
